@@ -1,0 +1,10 @@
+.vscode
+.clangd
+.cache
+temp
+build
+*.o
+*.out
+*.exe
+*.so
+*.a
