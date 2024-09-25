@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.20)
 project(bmp-reader
     VERSION 0.0.1
     DESCRIPTION "Read bmp files and print them in console"
@@ -15,7 +15,7 @@ set(readerlib src/BMPReader.cpp)
 add_library(reader STATIC ${readerlib})
 
 set(libs reader)
-foreach(l ${libs} ${libname})
+foreach(l ${libs})
     if(MSVC)
         target_compile_options(${l} PRIVATE /W4 /WX)
     else()
