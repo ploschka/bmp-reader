@@ -20,10 +20,12 @@ class BMPReader
 private:
     std::ifstream file;
     std::unique_ptr<BitMapFileHeader> fileHeader;
+    std::unique_ptr<BitMapHeader> infoHeader;
 
     const char* initFileHeader(const char* buff);
 public:
     BMPReader() = default;
+    ~BMPReader();
     int openBMP(const std::string& _filename);
     int displayBMP();
     int closeBMP();

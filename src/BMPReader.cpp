@@ -3,6 +3,11 @@
 
 #include <bmpreader/reader/BMPReader.hpp>
 
+BMPReader::~BMPReader()
+{
+    closeBMP();
+}
+
 const char* BMPReader::initFileHeader(const char* _buff)
 {
     fileHeader = std::make_unique<BitMapFileHeader>();
@@ -41,16 +46,16 @@ int BMPReader::openBMP(const std::string& _filename)
     {
         return E_RREAD;
     }
-    std::size_t chars_red = file.gcount();
+    std::size_t charsRed = file.gcount();
 
-    if (chars_red < bitMapFileHeaderSize)
+    if (charsRed < bitMapFileHeaderSize)
     {
         return E_RINVF;
     }
 
     const char* ptr = buffer;
     ptr = initFileHeader(ptr);
-    chars_red -= bitMapFileHeaderSize;
+    charsRed -= bitMapFileHeaderSize;
 
     if (fileHeader->type != bitMapSignature)
     {
@@ -69,6 +74,8 @@ int BMPReader::displayBMP()
 int BMPReader::closeBMP()
 {
     fileHeader.reset(nullptr);
+    infoHeader.reset(nullptr);
+
     if (file.is_open())
     {
         file.close();
