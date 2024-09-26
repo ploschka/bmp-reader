@@ -1,6 +1,7 @@
 #include <cstdint>
 
-struct BitMapFileHeader {
+struct BitMapFileHeader
+{
   uint16_t type;
   uint32_t size;
   uint16_t reserved1;
@@ -8,7 +9,8 @@ struct BitMapFileHeader {
   uint32_t offset;
 };
 
-struct BitMapV5Header {
+struct BitMapV5Header
+{
   uint32_t bV5Size;
   int32_t  bV5Width;
   int32_t  bV5Height;
