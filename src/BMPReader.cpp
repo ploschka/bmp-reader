@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include <bmpreader/reader/BMPReader.hpp>
+#include <memory>
 
 BMPReader::~BMPReader()
 {
@@ -28,6 +29,33 @@ const char* BMPReader::initFileHeader(const char* _buff)
     _buff += sizeof(uint32_t);
 
     return _buff;
+}
+
+const char* BMPReader::initInfo(const char* _buff, uint32_t _size)
+{
+    const char* retbuff;
+
+    switch (_size)
+    {
+    case bitMapV5HeaderSize:
+        retbuff = initV5Header(_buff);
+        break;
+
+    case bitMapV4HeaderSize:
+        retbuff = initV4Header(_buff);
+        break;
+
+    case bitMapInfoHeaderSize:
+        retbuff = initInfoHeader(_buff);
+        break;
+    case bitMapCoreHeaderSize:
+        retbuff = initCoreheader(_buff);
+        break;
+    default:
+        retbuff = nullptr;
+        break;
+    }
+    return retbuff;
 }
 
 int BMPReader::openBMP(const std::string& _filename)
@@ -61,6 +89,25 @@ int BMPReader::openBMP(const std::string& _filename)
     {
         return E_RSIGN;
     }
+
+    if (charsRed < sizeof(uint32_t))
+    {
+        return E_RINVF;
+    }
+
+    uint32_t infoSize = *reinterpret_cast<const uint32_t*>(ptr);
+    if (charsRed < infoSize)
+    {
+        return E_RINVF;
+    }
+
+    ptr = initInfo(ptr, infoSize);
+    if (!ptr)
+    {
+        return E_RSIZE;
+    }
+
+    charsRed -= infoSize;
 
     return SUCCESS;
 }
