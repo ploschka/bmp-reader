@@ -1,4 +1,4 @@
-#include <bmp/reader/BMPReader.hpp>
+#include <bmpreader/reader/BMPReader.hpp>
 #include <iostream>
 
 int main(int argc, char* argv[])
