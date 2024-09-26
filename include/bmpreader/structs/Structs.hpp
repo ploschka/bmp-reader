@@ -15,7 +15,9 @@ const std::size_t bitMapFileHeaderSize = 14;
 struct BitMapHeader
 {
     uint32_t size;
-    virtual ~BitMapHeader() = default;
+
+
+    BitMapHeader(uint32_t _size);
 };
 
 struct BitMapV5Header : public BitMapHeader
@@ -43,6 +45,8 @@ struct BitMapV5Header : public BitMapHeader
   uint32_t bV5ProfileData;
   uint32_t bV5ProfileSize;
   uint32_t bV5Reserved;
+
+    BitMapV5Header(uint32_t _size);
 };
 const std::size_t bitMapV5HeaderSize = 124;
 
@@ -67,6 +71,8 @@ struct BitMapV4Header : public BitMapHeader
   uint32_t bV4GammaRed;
   uint32_t bV4GammaGreen;
   uint32_t bV4GammaBlue;
+
+    BitMapV4Header(uint32_t _size);
 };
 const std::size_t bitMapV4HeaderSize = 108;
 
@@ -82,6 +88,8 @@ struct BitMapInfoHeader : public BitMapHeader
   int32_t  biYPelsPerMeter;
   uint32_t biClrUsed;
   uint32_t biClrImportant;
+
+    BitMapInfoHeader(uint32_t _size);
 };
 const std::size_t bitMapInfoHeaderSize = 40;
 
@@ -91,6 +99,8 @@ struct BitMapCoreHeader : public BitMapHeader
   uint16_t bcHeight;
   uint16_t bcPlanes;
   uint16_t bcBitCount;
+
+    BitMapCoreHeader(uint32_t _size);
 };
 const std::size_t bitMapCoreHeaderSize = 12;
 

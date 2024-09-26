@@ -11,10 +11,12 @@ include_directories(include)
 set(exename bmpreader)
 
 set(readerlib src/BMPReader.cpp)
+set(structslib src/Structs.cpp)
 
 add_library(reader STATIC ${readerlib})
+add_library(structs STATIC ${structslib})
 
-set(libs reader)
+set(libs reader structs)
 
 add_executable(${exename} main.cpp)
 target_link_libraries(${exename} ${libs})
