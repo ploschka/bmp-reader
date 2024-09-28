@@ -31,6 +31,32 @@ const char* BMPReader::initFileHeader(const char* _buff)
     return _buff;
 }
 
+const char* BMPReader::initV5Header(const char* _buffer)
+{
+    _buffer = initV4Header(_buffer);
+    // Do V5 parsing
+    return _buffer;
+}
+
+const char* BMPReader::initV4Header(const char* _buffer)
+{
+    _buffer = initInfoHeader(_buffer);
+    // Do V4 parsing
+    return _buffer;
+}
+
+const char* BMPReader::initInfoHeader(const char* _buffer)
+{
+    // Do Info parsing
+    return _buffer;
+}
+
+const char* BMPReader::initCoreHeader(const char* _buffer)
+{
+    // Do Core parsing
+    return _buffer;
+}
+
 const char* BMPReader::initInfo(const char* _buff, uint32_t _size)
 {
     const char* retbuff;
@@ -38,19 +64,25 @@ const char* BMPReader::initInfo(const char* _buff, uint32_t _size)
     switch (_size)
     {
     case bitMapV5HeaderSize:
+        infoHeader = std::make_unique<BitMapV5Header>(bitMapV5HeaderSize);
         retbuff = initV5Header(_buff);
         break;
 
     case bitMapV4HeaderSize:
+        infoHeader = std::make_unique<BitMapV4Header>(bitMapV4HeaderSize);
         retbuff = initV4Header(_buff);
         break;
 
     case bitMapInfoHeaderSize:
+        infoHeader = std::make_unique<BitMapInfoHeader>(bitMapInfoHeaderSize);
         retbuff = initInfoHeader(_buff);
         break;
+
     case bitMapCoreHeaderSize:
-        retbuff = initCoreheader(_buff);
+        infoHeader = std::make_unique<BitMapCoreHeader>(bitMapCoreHeaderSize);
+        retbuff = initCoreHeader(_buff);
         break;
+
     default:
         retbuff = nullptr;
         break;

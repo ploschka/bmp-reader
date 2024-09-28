@@ -30,7 +30,7 @@ private:
     const char* initV5Header(const char* _buff);
     const char* initV4Header(const char* _buff);
     const char* initInfoHeader(const char* _buff);
-    const char* initCoreheader(const char* _buff);
+    const char* initCoreHeader(const char* _buff);
 public:
     BMPReader() = default;
     ~BMPReader();
