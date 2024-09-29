@@ -30,20 +30,7 @@ std::size_t BitMapCoreHeader::getPictureSize()
     if (!isSupported(bcBitCount))
         return 0;
 
-    std::size_t lineWidth;
-    if (bcBitCount < 8)
-    {
-        lineWidth = bcBitCount * bcWidth;
-        auto rem = lineWidth % 8;
-        lineWidth /= 8;
-        if (rem > 0)
-            ++lineWidth;
-    }
-    else
-    {
-        lineWidth = bcBitCount / 8 * bcWidth;
-    }
-    return padLine(lineWidth) * bcHeight;
+    return getLineWidth() * bcHeight;
 }
 
 std::size_t BitMapInfoHeader::getPictureSize()
@@ -51,20 +38,7 @@ std::size_t BitMapInfoHeader::getPictureSize()
     if (!isSupported(biBitCount))
         return 0;
 
-    std::size_t lineWidth;
-    if (biBitCount < 8)
-    {
-        lineWidth = biBitCount * biWidth;
-        auto rem = lineWidth % 8;
-        lineWidth /= 8;
-        if (rem > 0)
-            ++lineWidth;
-    }
-    else
-    {
-        lineWidth = biBitCount / 8 * biWidth;
-    }
-    return padLine(lineWidth) * std::abs(biHeight);
+    return getLineWidth() * std::abs(biHeight);
 }
 
 int32_t BitMapCoreHeader::getWidth()
@@ -87,3 +61,38 @@ int32_t BitMapInfoHeader::getHeight()
     return biHeight;
 }
 
+std::size_t BitMapCoreHeader::getLineWidth()
+{
+    std::size_t lineWidth;
+    if (bcBitCount < 8)
+    {
+        lineWidth = bcBitCount * bcWidth;
+        auto rem = lineWidth % 8;
+        lineWidth /= 8;
+        if (rem > 0)
+            ++lineWidth;
+    }
+    else
+    {
+        lineWidth = bcBitCount / 8 * bcWidth;
+    }
+    return padLine(lineWidth);
+}
+
+std::size_t BitMapInfoHeader::getLineWidth()
+{
+    std::size_t lineWidth;
+    if (biBitCount < 8)
+    {
+        lineWidth = biBitCount * biWidth;
+        auto rem = lineWidth % 8;
+        lineWidth /= 8;
+        if (rem > 0)
+            ++lineWidth;
+    }
+    else
+    {
+        lineWidth = biBitCount / 8 * biWidth;
+    }
+    return padLine(lineWidth);
+}
