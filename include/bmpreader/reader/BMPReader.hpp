@@ -16,6 +16,7 @@ enum ReaderError
     E_RCLSE = -5, // Error closing file
     E_RSIZE = -6, // Invalid info header size
     E_RSEEK = -7, // Error while seeking file
+    E_RSUPP = -8, // Unsupported bmp file
 };
 
 class BMPReader

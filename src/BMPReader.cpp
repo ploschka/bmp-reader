@@ -239,6 +239,11 @@ int BMPReader::openBMP(const std::string& _filename)
     charsRed -= infoSize;
 
     actualSize = infoHeader->getPictureSize();
+    if (actualSize == 0)
+    {
+        closeBMP();
+        return E_RSUPP;
+    }
 
     file.seekg(fileHeader->offset, std::ios_base::beg);
     if (file.fail())
