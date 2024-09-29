@@ -181,7 +181,7 @@ const char* BMPReader::initInfo(const char* _buff, uint32_t _size)
 
 int BMPReader::openBMP(const std::string& _filename)
 {
-    const std::size_t bufferSize = 1024;
+    const std::size_t bufferSize = BM_FileHeaderSize + BM_V5HeaderSize;
     char buffer[bufferSize];
 
     file = std::ifstream(_filename, std::ios_base::binary);
@@ -193,12 +193,14 @@ int BMPReader::openBMP(const std::string& _filename)
     file.read(buffer, bufferSize);
     if (file.fail() && !file.eof())
     {
+        closeBMP();
         return E_RREAD;
     }
     std::size_t charsRed = file.gcount();
 
     if (charsRed < BM_FileHeaderSize)
     {
+        closeBMP();
         return E_RINVF;
     }
 
@@ -208,11 +210,13 @@ int BMPReader::openBMP(const std::string& _filename)
 
     if (fileHeader->type != bitMapSignature)
     {
+        closeBMP();
         return E_RSIGN;
     }
 
     if (charsRed < sizeof(uint32_t))
     {
+        closeBMP();
         return E_RINVF;
     }
 
@@ -221,16 +225,27 @@ int BMPReader::openBMP(const std::string& _filename)
 
     if (charsRed < infoSize)
     {
+        closeBMP();
         return E_RINVF;
     }
 
     ptr = initInfo(ptr, infoSize);
     if (!ptr)
     {
+        closeBMP();
         return E_RSIZE;
     }
 
     charsRed -= infoSize;
+
+    actualSize = infoHeader->getPictureSize();
+
+    file.seekg(fileHeader->offset, std::ios_base::beg);
+    if (file.fail())
+    {
+        closeBMP();
+        return E_RSEEK;
+    }
 
     return SUCCESS;
 }

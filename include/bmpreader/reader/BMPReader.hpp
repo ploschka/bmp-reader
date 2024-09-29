@@ -15,6 +15,7 @@ enum ReaderError
     E_RINVF = -4, // Invalid bmp file
     E_RCLSE = -5, // Error closing file
     E_RSIZE = -6, // Invalid info header size
+    E_RSEEK = -7, // Error while seeking file
 };
 
 class BMPReader
@@ -31,6 +32,9 @@ private:
     const char* initV4Header(const char* _buff);
     const char* initInfoHeader(const char* _buff);
     const char* initCoreHeader(const char* _buff);
+
+    std::size_t actualSize; // Size of the full image in bytes
+    std::size_t pixelsPerLine;
 public:
     BMPReader() = default;
     ~BMPReader();

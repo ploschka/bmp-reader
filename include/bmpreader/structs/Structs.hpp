@@ -26,6 +26,9 @@ struct BitMapHeader
 
 
     BitMapHeader(uint32_t _size);
+    virtual std::size_t getPictureSize() = 0;
+    virtual int32_t getWidth() = 0;
+    virtual int32_t getHeight() = 0;
     virtual ~BitMapHeader() = default;
 };
 
@@ -37,6 +40,9 @@ struct BitMapCoreHeader : public BitMapHeader
     uint16_t bcBitCount;
 
     BitMapCoreHeader(uint32_t _size);
+    std::size_t getPictureSize();
+    int32_t getWidth();
+    int32_t getHeight();
 };
 
 struct BitMapInfoHeader : public BitMapHeader
@@ -53,6 +59,9 @@ struct BitMapInfoHeader : public BitMapHeader
     uint32_t biClrImportant;
 
     BitMapInfoHeader(uint32_t _size);
+    std::size_t getPictureSize();
+    int32_t getWidth();
+    int32_t getHeight();
 };
 
 struct BitMapV4Header : public BitMapInfoHeader
