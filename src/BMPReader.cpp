@@ -152,23 +152,23 @@ const char* BMPReader::initInfo(const char* _buff, uint32_t _size)
 
     switch (_size)
     {
-    case bitMapV5HeaderSize:
-        infoHeader = std::make_unique<BitMapV5Header>(bitMapV5HeaderSize);
+    case BM_V5HeaderSize:
+        infoHeader = std::make_unique<BitMapV5Header>(BM_V5HeaderSize);
         retbuff = initV5Header(_buff);
         break;
 
-    case bitMapV4HeaderSize:
-        infoHeader = std::make_unique<BitMapV4Header>(bitMapV4HeaderSize);
+    case BM_V4HeaderSize:
+        infoHeader = std::make_unique<BitMapV4Header>(BM_V4HeaderSize);
         retbuff = initV4Header(_buff);
         break;
 
-    case bitMapInfoHeaderSize:
-        infoHeader = std::make_unique<BitMapInfoHeader>(bitMapInfoHeaderSize);
+    case BM_InfoHeaderSize:
+        infoHeader = std::make_unique<BitMapInfoHeader>(BM_InfoHeaderSize);
         retbuff = initInfoHeader(_buff);
         break;
 
-    case bitMapCoreHeaderSize:
-        infoHeader = std::make_unique<BitMapCoreHeader>(bitMapCoreHeaderSize);
+    case BM_CoreHeaderSize:
+        infoHeader = std::make_unique<BitMapCoreHeader>(BM_CoreHeaderSize);
         retbuff = initCoreHeader(_buff);
         break;
 
@@ -197,14 +197,14 @@ int BMPReader::openBMP(const std::string& _filename)
     }
     std::size_t charsRed = file.gcount();
 
-    if (charsRed < bitMapFileHeaderSize)
+    if (charsRed < BM_FileHeaderSize)
     {
         return E_RINVF;
     }
 
     const char* ptr = buffer;
     ptr = initFileHeader(ptr);
-    charsRed -= bitMapFileHeaderSize;
+    charsRed -= BM_FileHeaderSize;
 
     if (fileHeader->type != bitMapSignature)
     {

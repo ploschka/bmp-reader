@@ -2,6 +2,15 @@
 
 const std::uint16_t bitMapSignature = 0x4d42;
 
+enum BitMapHeaderSize
+{
+    BM_FileHeaderSize = 14,
+    BM_CoreHeaderSize = 12,
+    BM_InfoHeaderSize = 40,
+    BM_V4HeaderSize = 108,
+    BM_V5HeaderSize = 124,
+};
+
 struct BitMapFileHeader
 {
   uint16_t type;
@@ -10,7 +19,6 @@ struct BitMapFileHeader
   uint16_t reserved2;
   uint32_t offset;
 };
-const std::size_t bitMapFileHeaderSize = 14;
 
 struct BitMapHeader
 {
@@ -30,7 +38,6 @@ struct BitMapCoreHeader : public BitMapHeader
 
     BitMapCoreHeader(uint32_t _size);
 };
-const std::size_t bitMapCoreHeaderSize = 12;
 
 struct BitMapInfoHeader : public BitMapHeader
 {
@@ -47,7 +54,6 @@ struct BitMapInfoHeader : public BitMapHeader
 
     BitMapInfoHeader(uint32_t _size);
 };
-const std::size_t bitMapInfoHeaderSize = 40;
 
 struct BitMapV4Header : public BitMapInfoHeader
 {
@@ -63,7 +69,6 @@ struct BitMapV4Header : public BitMapInfoHeader
 
     BitMapV4Header(uint32_t _size);
 };
-const std::size_t bitMapV4HeaderSize = 108;
 
 struct BitMapV5Header : public BitMapV4Header
 {
@@ -74,5 +79,4 @@ struct BitMapV5Header : public BitMapV4Header
 
     BitMapV5Header(uint32_t _size);
 };
-const std::size_t bitMapV5HeaderSize = 124;
 
