@@ -1,8 +1,24 @@
 #include <cstdint>
+#include <exception>
 #include <iostream>
 
 #include <bmpreader/reader/BMPReader.hpp>
 #include <memory>
+#include <new>
+
+static char getChar(const RGBTriple& _triple)
+{
+    if (_triple.blue == 255 &&
+        _triple.green == 255 &&
+        _triple.red == 255)
+    {
+        return ' ';
+    }
+    else
+    {
+        return '#';
+    }
+}
 
 BMPReader::~BMPReader()
 {
@@ -257,8 +273,57 @@ int BMPReader::openBMP(const std::string& _filename)
 
 int BMPReader::displayBMP()
 {
-    std::cout << "Hello, World!\n";
-    return SUCCESS;
+    int result = SUCCESS;
+    int32_t width = infoHeader->getWidth();
+    int32_t height = infoHeader->getHeight();
+    std::size_t lineWidth = infoHeader->getLineWidth();
+
+    if (height > 0)
+    {
+        std::unique_ptr<char[]> image;
+        try
+        {
+            image = std::make_unique<char[]>(actualSize);
+        }
+        catch (std::bad_alloc& e)
+        {
+            result = E_RNMEM;
+        }
+        if (result != SUCCESS)
+        {
+            closeBMP();
+            return result;
+        }
+
+        file.read(image.get(), actualSize);
+        if (file.fail())
+        {
+            closeBMP();
+            return E_RREAD;
+        }
+        if (file.eof())
+        {
+            closeBMP();
+            return E_RINVF;
+        }
+
+        for (int32_t i = height - 1; i > 0; --i)
+        {
+            const char* line = image.get() + i * lineWidth;
+            const char* pixel = line;
+
+            RGBTriple triple;
+
+            for (int32_t j = 0; j < width; ++j)
+            {
+                pixel = infoHeader->getPixel(pixel, triple);
+                std::cout << getChar(triple);
+            }
+            std::cout << '\n';
+        }
+    }
+
+    return result;
 }
 
 int BMPReader::closeBMP()

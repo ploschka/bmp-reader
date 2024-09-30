@@ -17,6 +17,7 @@ enum ReaderError
     E_RSIZE = -6, // Invalid info header size
     E_RSEEK = -7, // Error while seeking file
     E_RSUPP = -8, // Unsupported bmp file
+    E_RNMEM = -9, // Insufficient memory for image data
 };
 
 class BMPReader

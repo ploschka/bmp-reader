@@ -20,6 +20,13 @@ struct BitMapFileHeader
   uint32_t offset;
 };
 
+struct RGBTriple
+{
+    uint8_t blue;
+    uint8_t green;
+    uint8_t red;
+};
+
 struct BitMapHeader
 {
     uint32_t size;
@@ -30,6 +37,7 @@ struct BitMapHeader
     virtual int32_t getWidth() = 0;
     virtual int32_t getHeight() = 0;
     virtual std::size_t getLineWidth() = 0;
+    virtual const char* getPixel(const char* _pixel, RGBTriple& _triple) = 0;
     virtual ~BitMapHeader() = default;
 };
 
@@ -45,6 +53,7 @@ struct BitMapCoreHeader : public BitMapHeader
     int32_t getWidth();
     int32_t getHeight();
     std::size_t getLineWidth();
+    const char* getPixel(const char* _pixel, RGBTriple& _triple);
 };
 
 struct BitMapInfoHeader : public BitMapHeader
@@ -65,6 +74,7 @@ struct BitMapInfoHeader : public BitMapHeader
     int32_t getWidth();
     int32_t getHeight();
     std::size_t getLineWidth();
+    const char* getPixel(const char* _pixel, RGBTriple& _triple);
 };
 
 struct BitMapV4Header : public BitMapInfoHeader
@@ -80,6 +90,7 @@ struct BitMapV4Header : public BitMapInfoHeader
     uint32_t bV4GammaBlue;
 
     BitMapV4Header(uint32_t _size);
+    const char* getPixel(const char* _pixel, RGBTriple& _triple);
 };
 
 struct BitMapV5Header : public BitMapV4Header

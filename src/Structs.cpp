@@ -1,6 +1,8 @@
 #include <bmpreader/structs/Structs.hpp>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
+#include <bit>
 
 BitMapHeader::BitMapHeader(uint32_t _size) : size(_size) {}
 BitMapV5Header::BitMapV5Header(uint32_t _size) : BitMapV4Header(_size) {}
@@ -96,3 +98,67 @@ std::size_t BitMapInfoHeader::getLineWidth()
     }
     return padLine(lineWidth);
 }
+
+const char* BitMapCoreHeader::getPixel(const char* _pixel, RGBTriple& _triple)
+{
+    switch (bcBitCount)
+    {
+    case 24:
+        memcpy(&_triple, _pixel, 3);
+        _pixel += 3;
+        break;
+    
+    case 32:
+        memcpy(&_triple, _pixel, 3);
+        _pixel += 4;
+        break;
+    }
+
+    return _pixel;
+}
+
+const char* BitMapInfoHeader::getPixel(const char* _pixel, RGBTriple& _triple)
+{
+    switch (biBitCount)
+    {
+    case 24:
+        memcpy(&_triple, _pixel, 3);
+        _pixel += 3;
+        break;
+    
+    case 32:
+        memcpy(&_triple, _pixel, 3);
+        _pixel += 4;
+        break;
+    }
+
+    return _pixel;
+}
+
+const char* BitMapV4Header::getPixel(const char* _pixel, RGBTriple& _triple)
+{
+    switch (biBitCount)
+    {
+    case 24:
+        memcpy(&_triple, _pixel, 3);
+        _pixel += 3;
+        break;
+    
+    case 32:
+        uint32_t pixel;
+        memcpy(&pixel, _pixel, 4);
+        uint32_t blue = pixel & bV4BlueMask;
+        uint32_t green = pixel & bV4GreenMask;
+        uint32_t red = pixel & bV4RedMask;
+
+        _triple.blue = blue >> std::countr_zero(bV4BlueMask);
+        _triple.green = green >> std::countr_zero(bV4GreenMask);
+        _triple.red = red >> std::countr_zero(bV4RedMask);
+
+        _pixel += 4;
+        break;
+    }
+
+    return _pixel;
+}
+

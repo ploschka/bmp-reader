@@ -27,6 +27,6 @@ foreach(t ${libs} ${exename})
     else()
         target_compile_options(${t} PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()       
-    set_property(TARGET ${t} PROPERTY CXX_STANDARD 17)
+    set_property(TARGET ${t} PROPERTY CXX_STANDARD 20)
 endforeach()
 
