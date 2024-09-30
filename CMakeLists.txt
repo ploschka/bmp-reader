@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(bmp-reader
-    VERSION 0.0.1
+    VERSION 1.0.0
     DESCRIPTION "Read bmp files and print them in console"
     LANGUAGES CXX
     )
