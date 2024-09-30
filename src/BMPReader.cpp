@@ -1,10 +1,9 @@
 #include <cstdint>
-#include <exception>
 #include <iostream>
-
-#include <bmpreader/reader/BMPReader.hpp>
 #include <memory>
 #include <new>
+
+#include <bmpreader/reader/BMPReader.hpp>
 
 static char getChar(const RGBTriple& _triple)
 {

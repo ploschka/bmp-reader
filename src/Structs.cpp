@@ -1,8 +1,9 @@
-#include <bmpreader/structs/Structs.hpp>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <bit>
+
+#include <bmpreader/structs/Structs.hpp>
 
 BitMapHeader::BitMapHeader(uint32_t _size) : size(_size) {}
 BitMapV5Header::BitMapV5Header(uint32_t _size) : BitMapV4Header(_size) {}

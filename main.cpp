@@ -1,5 +1,6 @@
-#include <bmpreader/reader/BMPReader.hpp>
 #include <iostream>
+
+#include <bmpreader/reader/BMPReader.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -11,22 +12,26 @@ int main(int argc, char* argv[])
     }
 
     BMPReader reader;
-    if (reader.openBMP(argv[1]))
+    int err;
+    err = reader.openBMP(argv[1]);
+    if (err)
     {
         std::cerr << "Error occured while opening file\n";
-        return -1;
+        return err;
     }
 
-    if (reader.displayBMP())
+    err = reader.displayBMP();
+    if (err)
     {
         std::cerr << "Error occured while displaying bmp\n";
-        return -1;
+        return err;
     }
 
-    if (reader.closeBMP())
+    err = reader.closeBMP();
+    if (err)
     {
         std::cerr << "Error occured while closing file\n";
-        return -1;
+        return err;
     }
     return 0;
 }

@@ -36,7 +36,6 @@ private:
     const char* initCoreHeader(const char* _buff);
 
     std::size_t actualSize; // Size of the full image in bytes
-    std::size_t pixelsPerLine;
 public:
     BMPReader() = default;
     ~BMPReader();
