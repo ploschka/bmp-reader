@@ -272,40 +272,40 @@ int BMPReader::openBMP(const std::string& _filename)
 
 int BMPReader::displayBMP()
 {
-    int result = SUCCESS;
     int32_t width = infoHeader->getWidth();
     int32_t height = infoHeader->getHeight();
     std::size_t lineWidth = infoHeader->getLineWidth();
 
+    int result = SUCCESS;
+    std::unique_ptr<char[]> image;
+    try
+    {
+        image = std::make_unique<char[]>(actualSize);
+    }
+    catch (std::bad_alloc& e)
+    {
+        result = E_RNMEM;
+    }
+    if (result != SUCCESS)
+    {
+        closeBMP();
+        return result;
+    }
+
+    file.read(image.get(), actualSize);
+    if (file.fail())
+    {
+        closeBMP();
+        return E_RREAD;
+    }
+    if (file.eof())
+    {
+        closeBMP();
+        return E_RINVF;
+    }
+
     if (height > 0)
     {
-        std::unique_ptr<char[]> image;
-        try
-        {
-            image = std::make_unique<char[]>(actualSize);
-        }
-        catch (std::bad_alloc& e)
-        {
-            result = E_RNMEM;
-        }
-        if (result != SUCCESS)
-        {
-            closeBMP();
-            return result;
-        }
-
-        file.read(image.get(), actualSize);
-        if (file.fail())
-        {
-            closeBMP();
-            return E_RREAD;
-        }
-        if (file.eof())
-        {
-            closeBMP();
-            return E_RINVF;
-        }
-
         for (int32_t i = height - 1; i > 0; --i)
         {
             const char* line = image.get() + i * lineWidth;
@@ -321,8 +321,25 @@ int BMPReader::displayBMP()
             std::cout << '\n';
         }
     }
+    else
+    {
+        for (int32_t i = 0; i < std::abs(height); ++i)
+        {
+            const char* line = image.get() + i * lineWidth;
+            const char* pixel = line;
 
-    return result;
+            RGBTriple triple;
+
+            for (int32_t j = 0; j < width; ++j)
+            {
+                pixel = infoHeader->getPixel(pixel, triple);
+                std::cout << getChar(triple);
+            }
+            std::cout << '\n';
+        }
+    }
+
+    return SUCCESS;
 }
 
 int BMPReader::closeBMP()
